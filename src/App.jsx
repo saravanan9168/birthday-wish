@@ -3,6 +3,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import Home from './pages/Home'
 import Admin from './pages/Admin'
 import WishDetail from './pages/WishDetail'
+import Login from './pages/Login'
 
 export default function App(){
   return (
@@ -21,6 +22,7 @@ export default function App(){
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/admin" element={<Admin/>} />
+          <Route path="/login" element={<Login/>} />
           <Route path="/wish/:id" element={<WishDetail/>} />
         </Routes>
       </main>

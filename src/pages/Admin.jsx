@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
+import { isLoggedIn, logout } from '../utils/auth'
 
 function loadWishes(){
   try{ const raw = localStorage.getItem('wishes'); return raw?JSON.parse(raw):[] }catch(e){return[]}
@@ -12,6 +13,10 @@ export default function Admin(){
   const [editingId, setEditingId] = useState(null)
 
   useEffect(()=>{ setWishes(loadWishes()) },[])
+
+  if(!isLoggedIn()){
+    return <Navigate to="/login" replace />
+  }
 
   const resetForm = ()=> setForm({name:'', message:'', image:'', date:''})
 
@@ -39,6 +44,9 @@ export default function Admin(){
 
   return (
     <div className="container admin">
+      <div style={{display:'flex',justifyContent:'flex-end'}}>
+        <button className="btn ghost" onClick={()=>{logout(); window.location.href='/login'}}>Logout</button>
+      </div>
       <h2>Admin — manage wishes</h2>
       <form className="admin-form" onSubmit={handleSubmit}>
         <div className="row">
