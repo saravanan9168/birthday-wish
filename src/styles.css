@@ -78,3 +78,28 @@ nav a.admin-link{background:linear-gradient(90deg,var(--accent),#6ea0ff);padding
 }
 
 .wish-detail .detail-card{overflow:visible}
+
+/* enhanced hero and gallery for WishDetail */
+.wish-detail .hero{height:380px;border-radius:14px;overflow:hidden;margin-bottom:18px;background-position:center;background-size:cover;display:flex;align-items:center}
+.wish-detail .hero-inner{width:100%;padding:28px;text-align:center;color:#071022;background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));backdrop-filter: blur(2px)}
+.wish-detail .hero .emoji-large{font-size:72px;margin-bottom:8px}
+.wish-detail .hero .detail-name{font-family:Pacifico, cursive;color:#fff;font-size:36px;margin:6px 0}
+.wish-detail .hero .detail-msg{color:rgba(255,255,255,0.9);max-width:900px;margin:8px auto}
+.wish-detail .gallery{margin-top:12px}
+.wish-detail .gallery h3{margin:0 0 8px;color:var(--muted)}
+.wish-detail .thumbs{display:flex;gap:10px;flex-wrap:wrap}
+.wish-detail .thumb{display:block;border-radius:12px;overflow:hidden;flex:1 0 220px;max-width:320px;border:1px solid rgba(255,255,255,0.04);cursor:pointer}
+.wish-detail .thumb img{width:100%;height:160px;object-fit:cover;display:block}
+
+/* confetti pieces */
+.floating-area{position:relative;pointer-events:none;height:160px;margin-top:18px}
+.confetti{position:absolute;bottom:0;width:10px;height:12px;border-radius:2px;opacity:0;animation:confettiUp 3.6s linear infinite}
+.confetti:nth-child(odd){width:8px;height:10px}
+@keyframes confettiUp{
+  0%{transform:translateY(0) rotate(0);opacity:0}
+  10%{opacity:1}
+  100%{transform:translateY(-420px) rotate(360deg);opacity:0}
+}
+
+.float-emoji{position:absolute;font-size:22px;top:100px;opacity:0;transform:translateY(0);animation:floatUp 4s linear infinite}
+
