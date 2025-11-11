@@ -34,6 +34,47 @@ export default function Admin(){
     }
   }
 
+  // Export current wishes to JSON file
+  const exportJSON = ()=>{
+    const data = JSON.stringify(wishes, null, 2)
+    const blob = new Blob([data], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url; a.download = 'wishes.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url)
+  }
+
+  const importJSON = (file)=>{
+    const r = new FileReader()
+    r.onload = ()=>{
+      try{
+        const parsed = JSON.parse(r.result)
+        setWishes(parsed); saveWishes(parsed); alert('Imported')
+      }catch(e){ alert('Invalid JSON') }
+    }
+    r.readAsText(file)
+  }
+
+  // Save to GitHub via serverless API
+  const saveToGitHub = async ()=>{
+    try{
+      const r = await fetch('/api/save-wishes', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ data: wishes }) })
+      const j = await r.json()
+      if(!r.ok) return alert('Save failed: '+JSON.stringify(j))
+      alert('Saved to GitHub')
+    }catch(e){ alert('Save failed: '+e.message) }
+  }
+
+  const loadFromGitHub = async ()=>{
+    try{
+      const r = await fetch('/api/get-wishes')
+      const j = await r.json()
+      if(!r.ok) return alert('Load failed: '+JSON.stringify(j))
+      setWishes(j.data || [])
+      saveWishes(j.data || [])
+      alert('Loaded from GitHub')
+    }catch(e){ alert('Load failed: '+e.message) }
+  }
+
   const remove = (id)=>{
     if(!confirm('Delete this wish?')) return
     const next = wishes.filter(w=>w.id!==id)
@@ -63,6 +104,14 @@ export default function Admin(){
 
       <section className="existing">
         <h3>Existing wishes ({wishes.length})</h3>
+        <div style={{display:'flex',gap:8,marginBottom:12}}>
+          <button className="btn ghost" onClick={exportJSON}>Export JSON</button>
+          <label className="btn ghost" style={{cursor:'pointer'}}>
+            Import JSON<input type="file" accept="application/json" style={{display:'none'}} onChange={e=>e.target.files[0] && importJSON(e.target.files[0])} />
+          </label>
+          <button className="btn" onClick={saveToGitHub}>Save to GitHub</button>
+          <button className="btn ghost" onClick={loadFromGitHub}>Load from GitHub</button>
+        </div>
         {wishes.length===0 && <p className="muted">No wishes yet.</p>}
         <ul className="wish-table">
           {wishes.map(w=> (
